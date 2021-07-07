@@ -1,2 +1,2 @@
-# hello-world
-test
+# JavaScript HTML CSS Game on Canvas
+Frist project in js
