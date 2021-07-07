@@ -1,4 +1,4 @@
-﻿//COPYRIGHT Dennis Enrico Wilke 
+
 open = false;
 doc = document;
 cell = document.getElementsByClassName( 'listCon' );
