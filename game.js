@@ -301,12 +301,11 @@ canvas.width = 1000;
 canvas.height = 420;
 canvas.style.marginLeft = "20px";
 dx = 0;
-//?
 bol = true;
 jmpfrc = 50;
 grvity = 0.1;
 jmpBol = false;
-keys = [32,65,68,83,87,37,39,40,38,27,13];// 40 unten , 13 Enter, 38 oben
+keys = [32,65,68,83,87,37,39,40,38,27,13];
 speed = 4;
 kyRight = false;
 kyLeft = false;
@@ -317,7 +316,6 @@ grounded = true;
 jp = false;
 g = 0;
 open = Boolean;
-//jump
 //____________________Player
 itc = true;
 dont = true;
@@ -326,15 +324,15 @@ y = 328;
 ausgl = 12;
 ausgl1 = 12;
 leftSh = 0;
-//   this.x+=25
+
 leftFt = 0;
-// this.x -=19
+
 leftHd = 0;
-// this.x -=2
+
 leftPii = 1.009;
 rightPii = 0.94;
 leftHx = 0;
-//5
+
 leftY = 0;
 //3
 leftEye = 0;
@@ -342,15 +340,12 @@ leftEye = 0;
 leftR = 0;
 //3
 leftBcY = 0;
-//4
 anmi1 = 0;
 anmi = 0;
-//10
+
 time = 915100;
 vw = 0;
 oriY = 326;
-//default ground is 328
-//_________________Elfe
 leftEN = 4;
 ico = 0;
 newRun = false;
@@ -358,17 +353,6 @@ newRunY = false;
 ix = 50;
 iy = 150;
 
-/*
- space -> 32
- a -> 65
- d -> 68
- s ->  83
- w -> 87
- pfeiltaste(<-)  -> 37
- pfeiltaste(->)  -> 39
- pfeiltaste(down)  -> 40
- pfeiltaste(^)  -> 38
- */
 document.addEventListener( 'keydown',function ( event ) {
     keyode = event.keyCode;
     if ( keys.includes( keyode ) ) {
@@ -490,7 +474,7 @@ class Player {
             ausgl1 = 0;
             vw = 0;
         }
-        //IGNORE
+
         if ( kyUp && this.y > 0 ) {
             this.y = this.up();
         }
@@ -504,7 +488,7 @@ class Player {
         if ( grounded === false ) {
             this.gravity();
         }
-        // IGNORE
+
         if ( ( ( this.x > qx ) && ( this.x + this.w ) < qx + qw ) && ( ( this.y + this.h + 10 ) < qy )  ) {console.log('test')}
         
         
@@ -517,7 +501,7 @@ class Player {
 
 
 
-        //no outlie
+
         if ( ( ( this.x - or) - ( ox ) > 0 || ( ( this.x + 10 ) - ( ox - or ) ) < -20 ) ) {
             deadx1 = false;
         } else {
@@ -536,7 +520,7 @@ class Player {
         }
 
         
-        // stroke outline
+
 
 
         if ( ( ( this.x - or1) - ( ox1 ) > 0 || ( ( this.x + 15 ) - ( ox1 - or1 ) ) < -20 ) ) {
@@ -663,7 +647,7 @@ class Player {
             ctx.fillStyle = "#040a08";
             ctx.fill();
             ctx.closePath();
-            // +10 __ -10   upFt = 32 dwnFt = 42 
+
             /*shoes  */
             ctx.beginPath();
             ctx.rect( ( ( ( ( this.x - leftFt ) ) + ausgl ) - ausgl1 ) + deX,( this.y + 40 ),this.w + 6,10 );
@@ -685,7 +669,7 @@ class Player {
             ctx.beginPath();
             ctx.arc( ( ( ( ( this.x + 4 ) + deX ) + leftHx ) + ausgl ) - ausgl1,( ( this.y - 33 ) + leftBcY ) - leftY, /*r*/
                 20 + leftR,rightPii * Math.PI,false );
-            //basecap// left 1.099// right 0.94=pii //leftHx=2//leftY=+3
+            
             ctx.fillStyle = "#274c7a";
             ctx.fill();
             ctx.closePath();
@@ -705,7 +689,7 @@ class Player {
     }
 }
 t = true;
-//class Enemy ist Elfe
+
 class Enemy {
     constructor( ix,iy,ir,any,pi ) {
         this.ix = ix;
@@ -759,7 +743,6 @@ class Enemy {
             } else {
                 newRun = true;
             }
-            //------------------------------------------------------------------------------------
             // searcher y
             if ( this.iy > ( y - 65 ) ) {
                 this.iy -= ( speed - 3.4 );
@@ -777,8 +760,6 @@ class Enemy {
         } else {
             this.flight();
         }
-        //start run requestFrame _> anzahl 181
-        //------------------------------------------------------------------------------------
     }
     draw() {
         ctx.beginPath();
@@ -828,7 +809,6 @@ Xfaktor = 0;
 Yfaktor = 0;
 Xfaktor1 = 0;
 Yfaktor1 = 0;
-//______________________________
 ow = 70;
 iqx2 = 70;
 rota = 0;
@@ -837,18 +817,12 @@ var color1 = "white";
 class objctBck {
     constructor( ox,oy,or,pi,oBol,ox1,oy1,or1 ) {
         this.ox = ox;
-        //--> 
         this.oy = oy;
-        //-->
         this.pi = pi;
-        //-->
         this.or = or;
         this.oBol = oBol;
-        //_____________________
         this.ox1 = ox1;
-        //--> 
         this.oy1 = oy1;
-        //-->
         this.or1 = or1;
         if ( hiok < 200 ) {
             var uio = this.rdm( 1,2 )
@@ -857,8 +831,6 @@ class objctBck {
         color1 = this.rdmColor( color1,this.ox1,this.oy1,this.or1 )
 
         color = this.rdmColor(color,this.ox,this.oy,this.or)
-        //525
-        //516
         or -= 10;
         or1 -= 10;
         this.or = or;
@@ -941,7 +913,6 @@ class objctBck {
                     doy1 = -4;
                     console.log( 'B4' )
                 }
-//-----------------------------------------------
                if ( dox1 === 4 && doy1 === 4 ) {
                     dox1 = 4;
                     doy1 = 4
@@ -1146,8 +1117,6 @@ class objctBck {
     }
 
     draw() {
-
-        //MAIN
         ctx.beginPath();
         ctx.arc( this.ox,this.oy,this.or,this.pi,this.oBol );
         ctx.strokeStyle = "whitesmoke";
@@ -1155,7 +1124,6 @@ class objctBck {
         ctx.stroke();
         ctx.fill();
         ctx.closePath();
-        //MAIN
         ctx.beginPath();
         ctx.arc( this.ox1,this.oy1,this.or1,this.pi,this.oBol );
         ctx.strokeStyle = color1;
@@ -1213,7 +1181,6 @@ class Animat {
         anmi = 0;
         anmi1 = 0;
     }
-    //92
     draw() {
         // schoes behind
         ctx.beginPath();
@@ -1223,8 +1190,7 @@ class Animat {
         ctx.rotate( rota * Math.PI / 180 );
         ctx.fill();
         ctx.closePath();
-        // +10 __ -10   upFt = 32 dwnFt = 42 
-
+ 
         ctx.beginPath();
         ctx.rect( this.x + deX,( this.y - 15 ),this.w - 4,this.h + 35 );
         // body
@@ -1252,7 +1218,6 @@ class Animat {
         ctx.beginPath();
         ctx.arc( ( ( ( ( this.x + 4 ) + leftHx ) + ausgl ) - ausgl1 ) + deX,( ( this.y - 33 ) + leftBcY ) - leftY, /*r*/
             20 + leftR,rightPii * Math.PI,false );
-        //basecap// left 1.099// right 0.94=pii //leftHx=2//leftY=+3
         ctx.fillStyle = "#274c7a";
         ctx.fill();
         ctx.closePath();
@@ -1275,8 +1240,8 @@ class Animat {
 
     }
 }
-var qw = 180 , qx = (canvas.width - qw), qh = 50, qy = (canvas.height - (qh + 40) ), deltaQx = -4;
-
+// var qw = 180 , qx = (canvas.width - qw), qh = 50, qy = (canvas.height - (qh + 40) ), deltaQx = -4;
+/*
 class Recta { 
     constructor(qx,qy,qw,qh) {
         this.qx = qx;
@@ -1308,25 +1273,24 @@ class Recta {
     }
 
 }
-
-
+*/
 
 
 function clear() {
-    //if ( dead === false ) {
+    if ( dead === false ) {
         if ( open === true ) {   } else {
     canvas.width = 1000;
     canvas.height = 420;
     ctx.clearRect( 0,0,canvas.width,canvas.height );
         }
-    //};
+    };
     requestAnimationFrame( clear );
     requestAnimationFrame( start );
    
 }
 
 function start() {
-    //if ( dead === false ) {
+    if ( dead === false ) {
         if ( open === true ) {  } else {
             player = new Player( x,( y ),20,10 );
             if ( kyRight || kyLeft ) {
@@ -1338,25 +1302,10 @@ function start() {
             }
             enemy = new Enemy( ix,iy,10,0,2 * Math.PI );
             objct = new objctBck( ox,oy,or,pi,oBol,ox1,oy1,or );
-            rect = new Recta(qx,qy,qw,qy);
         }
-    //}
+    }
 
 }
 requestAnimationFrame( clear );
 requestAnimationFrame( start );
 start();
-
-/*TO-DO !
-  _____als Nächstes:
-
---> VERFEINER CHECK-DEAD -> BEI Y! check
- 
- --> mach noch ein richtiges menü und pause über escape 
-
-/* https://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_canvas_rotate
- ________________________________________________
- ---> überleg ein LEVEl Design!
- ___________________________________________________Später:
- */
-//<--this.Todo
