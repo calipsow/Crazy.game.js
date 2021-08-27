@@ -489,7 +489,7 @@ class Player {
             this.gravity();
         }
 
-        if ( ( ( this.x > qx ) && ( this.x + this.w ) < qx + qw ) && ( ( this.y + this.h + 10 ) < qy )  ) {console.log('test')}
+        // if ( ( ( this.x > qx ) && ( this.x + this.w ) < qx + qw ) && ( ( this.y + this.h + 10 ) < qy )  ) {console.log('test')}
         
         
         
