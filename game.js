@@ -10,6 +10,7 @@ var upit = 0;
 cl1Bol = false
 cl2Bol = false
 cl3Bol = false
+
 function mnuNavi(evt) {
     if ( open ) {
         if ( evt === 40 ) {
@@ -297,16 +298,18 @@ mnuBtn.addEventListener( 'click',function () { sliderIN();} );
 
 canvas = document.getElementById( 'canvas' );
 ctx = canvas.getContext( '2d' );
-canvas.width = 1000;
-canvas.height = 420;
+canvas.width = 1350;
+canvas.height = 580;
 canvas.style.marginLeft = "20px";
 dx = 0;
+//?
 bol = true;
 jmpfrc = 50;
 grvity = 0.1;
 jmpBol = false;
-keys = [32,65,68,83,87,37,39,40,38,27,13];
+keys = [32,65,68,83,87,37,39,40,38,27,13];// 40 unten , 13 Enter, 38 oben
 speed = 4;
+stSpeed = 1;
 kyRight = false;
 kyLeft = false;
 kyUp = false;
@@ -316,6 +319,7 @@ grounded = true;
 jp = false;
 g = 0;
 open = Boolean;
+//jump
 //____________________Player
 itc = true;
 dont = true;
@@ -324,15 +328,15 @@ y = 328;
 ausgl = 12;
 ausgl1 = 12;
 leftSh = 0;
-
+//   this.x+=25
 leftFt = 0;
-
+// this.x -=19
 leftHd = 0;
-
+// this.x -=2
 leftPii = 1.009;
 rightPii = 0.94;
 leftHx = 0;
-
+//5
 leftY = 0;
 //3
 leftEye = 0;
@@ -340,12 +344,15 @@ leftEye = 0;
 leftR = 0;
 //3
 leftBcY = 0;
+//4
 anmi1 = 0;
 anmi = 0;
-
+//10
 time = 915100;
 vw = 0;
 oriY = 326;
+//default ground is 328
+//_________________Elfe
 leftEN = 4;
 ico = 0;
 newRun = false;
@@ -353,6 +360,17 @@ newRunY = false;
 ix = 50;
 iy = 150;
 
+/*
+ space -> 32
+ a -> 65
+ d -> 68
+ s ->  83
+ w -> 87
+ pfeiltaste(<-)  -> 37
+ pfeiltaste(->)  -> 39
+ pfeiltaste(down)  -> 40
+ pfeiltaste(^)  -> 38
+ */
 document.addEventListener( 'keydown',function ( event ) {
     keyode = event.keyCode;
     if ( keys.includes( keyode ) ) {
@@ -402,8 +420,10 @@ document.addEventListener( 'keyup',function ( event ) {
     var key = event.keyCode;
     if ( key === 39 || key === 68 ) {
         kyRight = false;
+        stSpeed = 1;
         dont = true;
     } else if ( key === 37 || key === 65 ) {
+        stSpeed = 1;
         kyLeft = false;
         dont = true;
     } else if ( key === 38 || key === 87 ) {
@@ -429,7 +449,8 @@ var deady2 = false;
 var dead = false
 var counter = 0;
 ivn = 0;
-var it = 1 , g = 1; 
+var it = 0 , g = 1, gi = 5; 
+var asGr, qxGround = qy, qBol = false,rto = -1,AniBol, xy , defaultGround  =  canvas.height - 35;
 class Player {
     constructor( x,y,w,h ) {
         this.x = x;
@@ -440,7 +461,7 @@ class Player {
         this.score()
         this.checkDead()       
         
-        if ( kyRight && this.x < 940 ) {
+        if ( kyRight && this.x < canvas.width - this.h*2 ) {
             this.x = this.right();
             ausgl = -1;
             leftSh = 0;
@@ -456,8 +477,9 @@ class Player {
         } else {
             ausgl = 0;
             vw = 2;
+            
         }
-        if ( kyLeft && this.x > 50 ) {
+        if ( kyLeft && this.x + this.h > 50 ) {
             this.x = this.left();
             ausgl1 = 1;
             leftSh = 10;
@@ -473,69 +495,80 @@ class Player {
         } else {
             ausgl1 = 0;
             vw = 0;
+            
         }
-
+        // this.y + 50 absolute y achse        
+        //IGNORE
         if ( kyUp && this.y > 0 ) {
-            this.y = this.up();
+            
         }
         if ( kyDwn && this.y < ( 368 - 40 ) ) {
-            this.y = this.down();
+            
         }
         if ( jp && no ) {
             no = false;
-            this.jmp();
-        }
-        if ( grounded === false ) {
-            this.gravity();
+            
         }
 
-        if ( ( ( this.x > qx ) && ( this.x + this.w ) < qx + qw ) && ( ( this.y + this.h + 10 ) < qy )  ) {console.log('test')}
+        // IGNORE
+
+        if ( jp && grounded === true ) {
+            
+            AniBol = true;
+            if ( rto < 0 ) { xy = ( this.y - 150 ); rto++; }
+        }
+        if ( AniBol ) {
+            this.jmp();
+        }
+
+
+        if ( ( ( this.x > qx ) && ( this.x + this.w ) < qx + qw ) && ( ( this.y + this.h + 10 ) < qy ) ) {
+            qBol = true;
+            
+            defaultGround = qy;
+
+        } else { qBol = false; defaultGround = canvas.height - 40}
+
+        if ( grounded === false && AniBol === false) {
+            this.gravity()
         
+        } 
+        if ( grounded === true && AniBol === false && qBol === false ) { this.gravity() }
+        if ( qBol && grounded) {
+            if ( kyLeft === false && kyRight === false ) {
+                this.x += deltaQx ;
+            }
+        }
         
-        
+        y = this.y
         this.draw();
     }
     checkDead() {
-
-
-
-
-
-
+        //no outlie
         if ( ( ( this.x - or) - ( ox ) > 0 || ( ( this.x + 10 ) - ( ox - or ) ) < -20 ) ) {
             deadx1 = false;
         } else {
             deadx1 = true;
         }
-
-
         if ( ( ( this.y - 80 ) - ( oy - or ) ) > 0 || ( ( this.y + (this.h )) - ( oy + or ) ) < -80 ) {
             deady1 = false
         } else {
             deady1 = true
         }
-
         if ( deady1 && deadx1 ) {
             this.dead();
         }
-
-        
-
-
-
+        // stroke outline
         if ( ( ( this.x - or1) - ( ox1 ) > 0 || ( ( this.x + 15 ) - ( ox1 - or1 ) ) < -20 ) ) {
             deadx2 = false;
         } else {
             deadx2 = true;
         }
-
         if ( ( ( this.y - 80 ) - ( oy1 - or1 ) ) > 0 || ( ( this.y + ( this.h )) - ( oy1 + or1 ) ) < -80 ) {
             deady2 = false
         } else {
             deady2 = true
         }
-
-
         if ( deady2 && deadx2 ) {
             this.dead();
         } 
@@ -556,56 +589,76 @@ class Player {
        dead = true;
     }
     jmp() {
-        
-        var gi = 1;
-        var t = 0.009900990099009901;
-        var xy = y
-        let inter = setInterval( () => {
-            if ( (xy - 150) > this.y  ) {
-                clearInterval( inter );
-                grounded = false;
-                this.gravity();
-            } else {
-                this.y -= (  ( 3.5 - gi ) );
-               
-                gi += 0.02;
+        grounded = false;
+        var zo = 0.01
+            if ( (xy) > this.y  ) {
+                AniBol = false;
+                 g = 1,
+                 gi = 5;
+                 rto = -1;
+            } else if (xy < this.y ){
+                if ( gi < 0.1 ) {
+                    zo = 0;
+                } 
+                this.y -= ( gi );
+                gi -= zo;
                 y = this.y;
-                if ( gi < 0.2 ) {
+
+               /* if ( gi < 0.2 ) {
                     gi = 0.1
-                }
+                }*/
             }
-        },1);
-    }
-    gravity() {
+        }
  
-        this.y = Math.round( this.y );
-        if (  this.y >  315  ) {
-            //default ground is 328
+    
+    
+    gravity() {
+
+        if ( ( this.y + 52 ) > ( defaultGround + 2)  ) {
+            if ( defaultGround - ( this.y + 52 ) > 1 ) {
+                this.y = this.y - ( defaultGround - ( this.y + 52 ) )
+                y = this.y
+                grounded = true;
+                AniBol = false;
+                it = 0;
+                g = 1;
+
+            }
             grounded = true;
-            no = true;
-            it = 1
-            g = 1
+            AniBol = false;
+            it = 0;
+            g = 1;
         } else {
-            this.y += (it);
-            it += .75;
-                      
+            grounded = false;
+            this.y += (1 + it);
+            it += .5;
             y = this.y
         }
     }
     right() {
-        this.x = this.x + ( speed + .8 );
+        
+        if ( stSpeed <= 4.5 ) {
+            stSpeed += .5;
+        } 
+        this.x += ( stSpeed );
         newRun = false
         newRunY = false
         return this.x;
     }
     left() {
-        this.x = this.x - ( speed + .8 );
+        if ( stSpeed <= 4.5 ) {
+            stSpeed += .5;
+        }
+        
+        this.x -= ( stSpeed );
         newRun = false
         newRunY = false
         return this.x;
     }
+
+
+
     up() {
-        this.y = this.y - ( speed + .5 );
         newRun = false
         newRunY = false
         return this.y;
@@ -618,15 +671,15 @@ class Player {
         if ( dont ) {
 
             ctx.beginPath();
-            ctx.rect( this.x + deX,( this.y - 15 ),this.w - 4,this.h + 35 );
+            ctx.rect( this.x + deX,( this.y - 15 ),this.w - 4, this.h + 35 );
             // body
             ctx.fillStyle = '#274f45';
             ctx.fill();
             ctx.closePath();
         }
         ctx.beginPath();
-        ctx.moveTo( 0,380 );
-        ctx.lineTo( 1000,380 );
+        ctx.moveTo( 0 , canvas.height - 35 );
+        ctx.lineTo( canvas.width , canvas.height - 35 );
         ctx.strokeStyle = "white";
         ctx.stroke();
         ctx.closePath();
@@ -647,7 +700,7 @@ class Player {
             ctx.fillStyle = "#040a08";
             ctx.fill();
             ctx.closePath();
-
+            // +10 __ -10   upFt = 32 dwnFt = 42 
             /*shoes  */
             ctx.beginPath();
             ctx.rect( ( ( ( ( this.x - leftFt ) ) + ausgl ) - ausgl1 ) + deX,( this.y + 40 ),this.w + 6,10 );
@@ -659,9 +712,7 @@ class Player {
         if ( dont ) {
             /* head2 */
             ctx.beginPath();
-            ctx.arc( ( ( ( ( this.x + 7 ) + deX ) + leftHd ) + ausgl ) - ausgl1, this.y - 25 , /*r*/
-                17.5,2.7 * Math.PI,true );
-            //head2
+            ctx.arc( ( ( ( ( this.x + 7 ) + deX ) + leftHd ) + ausgl ) - ausgl1, this.y - 25 , /*r*/17.5,2.7 * Math.PI,true );
             ctx.fillStyle = "#ffddb7";
             ctx.fill();
             ctx.closePath();
@@ -669,7 +720,7 @@ class Player {
             ctx.beginPath();
             ctx.arc( ( ( ( ( this.x + 4 ) + deX ) + leftHx ) + ausgl ) - ausgl1,( ( this.y - 33 ) + leftBcY ) - leftY, /*r*/
                 20 + leftR,rightPii * Math.PI,false );
-            
+            //basecap// left 1.099// right 0.94=pii //leftHx=2//leftY=+3
             ctx.fillStyle = "#274c7a";
             ctx.fill();
             ctx.closePath();
@@ -689,7 +740,7 @@ class Player {
     }
 }
 t = true;
-
+//class Enemy ist Elfe
 class Enemy {
     constructor( ix,iy,ir,any,pi ) {
         this.ix = ix;
@@ -704,7 +755,12 @@ class Enemy {
         iy = this.iy
 
 
-        
+        if ( ( this.ix - x > 360) || (this.ix - x < -360) ) {
+            console.log('tfkzhzfikub')
+            newRun = false;
+            newRunY = false; 
+            this.search();
+        }
         
         this.search();
         this.flight();
@@ -715,13 +771,13 @@ class Enemy {
         if ( newRunY && newRun ) {
             ico = 0;
             if ( this.iy > 240 && t ) {
-                this.iy -= 0.2;
+                this.iy -= 0.25;
                 iy = this.iy;
             } else if ( this.iy < 240 ) {
                 t = false;
             }
             if ( this.iy < 259 && t === false ) {
-                this.iy += 0.2;
+                this.iy += 0.25;
                 iy = this.iy;
             } else {
                 t = true;
@@ -735,20 +791,21 @@ class Enemy {
         // searcher x
         if ( newRun === false || newRunY === false ) {
             if ( this.ix < ( x - 60 ) ) {
-                this.ix += ( speed - 2.5 );
+                this.ix += ( speed - 2 );
                 newRun = false;
             } else if ( this.ix > ( x - 55 ) ) {
-                this.ix -= ( speed - 2.5 )
+                this.ix -= ( speed - 2 )
                 newRun = false;
             } else {
                 newRun = true;
             }
+            //------------------------------------------------------------------------------------
             // searcher y
             if ( this.iy > ( y - 65 ) ) {
-                this.iy -= ( speed - 3.4 );
+                this.iy -= ( speed - 3.5 );
                 newRunY = false;
             } else if ( this.iy < ( y - 70 ) ) {
-                this.iy += ( speed - 3.4 );
+                this.iy += ( speed - 3.5 );
                 ico++;
                 newRunY = false;
             } else {
@@ -760,6 +817,8 @@ class Enemy {
         } else {
             this.flight();
         }
+        //start run requestFrame _> anzahl 181
+        //------------------------------------------------------------------------------------
     }
     draw() {
         ctx.beginPath();
@@ -809,20 +868,28 @@ Xfaktor = 0;
 Yfaktor = 0;
 Xfaktor1 = 0;
 Yfaktor1 = 0;
+//______________________________
 ow = 70;
 iqx2 = 70;
 rota = 0;
+
 var color="white";
 var color1 = "white";
 class objctBck {
     constructor( ox,oy,or,pi,oBol,ox1,oy1,or1 ) {
         this.ox = ox;
+        //--> 
         this.oy = oy;
+        //-->
         this.pi = pi;
+        //-->
         this.or = or;
         this.oBol = oBol;
+        //_____________________
         this.ox1 = ox1;
+        //--> 
         this.oy1 = oy1;
+        //-->
         this.or1 = or1;
         if ( hiok < 200 ) {
             var uio = this.rdm( 1,2 )
@@ -831,6 +898,8 @@ class objctBck {
         color1 = this.rdmColor( color1,this.ox1,this.oy1,this.or1 )
 
         color = this.rdmColor(color,this.ox,this.oy,this.or)
+        //525
+        //516
         or -= 10;
         or1 -= 10;
         this.or = or;
@@ -913,6 +982,7 @@ class objctBck {
                     doy1 = -4;
                     console.log( 'B4' )
                 }
+//-----------------------------------------------
                if ( dox1 === 4 && doy1 === 4 ) {
                     dox1 = 4;
                     doy1 = 4
@@ -1117,6 +1187,8 @@ class objctBck {
     }
 
     draw() {
+
+        //MAIN
         ctx.beginPath();
         ctx.arc( this.ox,this.oy,this.or,this.pi,this.oBol );
         ctx.strokeStyle = "whitesmoke";
@@ -1124,10 +1196,11 @@ class objctBck {
         ctx.stroke();
         ctx.fill();
         ctx.closePath();
+        //MAIN
         ctx.beginPath();
         ctx.arc( this.ox1,this.oy1,this.or1,this.pi,this.oBol );
         ctx.strokeStyle = color1;
-        ctx.stroke();
+        ctx.fill();
         ctx.closePath();
 
     }
@@ -1181,16 +1254,17 @@ class Animat {
         anmi = 0;
         anmi1 = 0;
     }
+    //92
     draw() {
         // schoes behind
         ctx.beginPath();
-        ctx.rect( ( ( ( ( this.x - leftFt ) ) + ausgl ) - ausgl1 ) + deX,( this.y + 45 ) - anmi1 + 1,this.w + 6,10 );
-        //shoes behind
+        ctx.rect( ( ( ( ( this.x - leftFt ) ) + ausgl ) - ausgl1 ) + deX,( this.y + 45 ) - anmi1 + 1,this.w + 6, 10 );
         ctx.fillStyle = "#040a08";
         ctx.rotate( rota * Math.PI / 180 );
         ctx.fill();
         ctx.closePath();
- 
+        // +10 __ -10   upFt = 32 dwnFt = 42 
+
         ctx.beginPath();
         ctx.rect( this.x + deX,( this.y - 15 ),this.w - 4,this.h + 35 );
         // body
@@ -1218,6 +1292,7 @@ class Animat {
         ctx.beginPath();
         ctx.arc( ( ( ( ( this.x + 4 ) + leftHx ) + ausgl ) - ausgl1 ) + deX,( ( this.y - 33 ) + leftBcY ) - leftY, /*r*/
             20 + leftR,rightPii * Math.PI,false );
+        //basecap// left 1.099// right 0.94=pii //leftHx=2//leftY=+3
         ctx.fillStyle = "#274c7a";
         ctx.fill();
         ctx.closePath();
@@ -1240,8 +1315,8 @@ class Animat {
 
     }
 }
-// var qw = 180 , qx = (canvas.width - qw), qh = 50, qy = (canvas.height - (qh + 40) ), deltaQx = -4;
-/*
+var qw = 180 , qx = 150, qh = 50, qy = canvas.height - qh*3 , deltaQx = -4;
+
 class Recta { 
     constructor(qx,qy,qw,qh) {
         this.qx = qx;
@@ -1261,51 +1336,74 @@ class Recta {
         }
         this.qx += deltaQx;
         qx = this.qx;
-
+        
     }
     
     draw() {
         ctx.beginPath();
-        ctx.rect(qx,qy,qw,qh);
-        ctx.strokeStyle="white";
+        ctx.rect( qx , qy , qw , qh);
+        ctx.strokeStyle ="white";
         ctx.stroke();
         ctx.closePath();
+
+        ctx.beginPath();
+        ctx.rect( qx + 240, y - 52, qw -150, h + 92 );
+        ctx.strokeStyle = "white";
+        ctx.stroke();
+        ctx.closePath();
+
     }
 
 }
-*/
+
+
 
 
 function clear() {
-    if ( dead === false ) {
+ if ( dead === false ) {
         if ( open === true ) {   } else {
-    canvas.width = 1000;
-    canvas.height = 420;
+    canvas.width = 1350;
+    canvas.height = 580;
     ctx.clearRect( 0,0,canvas.width,canvas.height );
         }
-    };
+};
     requestAnimationFrame( clear );
     requestAnimationFrame( start );
    
 }
-
+y = canvas.height - 100
 function start() {
-    if ( dead === false ) {
-        if ( open === true ) {  } else {
-            player = new Player( x,( y ),20,10 );
-            if ( kyRight || kyLeft ) {
-                dont = false;
-                animat = new Animat( ( ( x - 2 ) + ausgl / 2 ) + ausgl1 * 7,( y ),20,10 );
-            } else {
-                anmi = 0;
-                anmi1 = 0;
-            }
-            enemy = new Enemy( ix,iy,10,0,2 * Math.PI );
-            objct = new objctBck( ox,oy,or,pi,oBol,ox1,oy1,or );
-        }
-    }
+  if ( dead === false ) {
+      if ( open === true ) { } else {
+          player = new Player( x,( y ),20,10 );
+          if ( kyRight || kyLeft ) {
+              dont = false;
+              animat = new Animat( ( ( x - 2 ) + ausgl / 2 ) + ausgl1 * 7,( y ),20,10 );
+          } else {
+              anmi = 0;
+              anmi1 = 0;
+          }
+          enemy = new Enemy( ix,iy,10,0,2 * Math.PI );
+          objct = new objctBck( ox,oy,or,pi,oBol,ox1,oy1,or );
+         // rect = new Recta( qx,qy,qw,qy );
+      } 
+  }
 
 }
 requestAnimationFrame( clear );
 requestAnimationFrame( start );
 start();
+
+/*TO-DO !
+  _____als Nächstes:
+
+--> VERFEINER CHECK-DEAD -> BEI Y! check
+ 
+ --> mach noch ein richtiges menü und pause über escape 
+
+/* https://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_canvas_rotate
+ ________________________________________________
+ ---> überleg ein LEVEl Design!
+ ___________________________________________________Später:
+ */
+//<--this.Todo
