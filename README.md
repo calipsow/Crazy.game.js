@@ -1,2 +1,3 @@
-# JavaScript HTML CSS Game on Canvas
-Frist project in js 
+# JavaScript Game
+## Frist project in js
+ 
