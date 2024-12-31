@@ -1,4 +1,15 @@
 # JavaScript Game
 ## Frist project in js
  
-<p><strong>This is the first milestone on my coding career started absolut from zero. Immediately after I learned the bare basics of coding I decided to manifest these skills and wrote a crazy little canvas JS game. And turns out - nobody including me will ever understand what the code actually does, but the "game" worked. - On my machine :D</strong></p>
+<p><strong>
+
+Its always funny to look back at your very first serious project after years and try to comprehent the codebase and realising: "Good Thanks I Stop Writing Code Line This 😄" 
+<br/>
+Its the first milestone on my coding career started from absolut zero. 
+<br/>
+Its not about code style or anything professional its just about fun doing it; 
+<br/>
+- Even if nobody including myself will understand whatever i wrote, but in the end it worked and most important, i learned a lot from it.
+<br/>
+So Enjoy!
+</strong></p>
